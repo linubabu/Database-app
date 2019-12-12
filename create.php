@@ -7,11 +7,45 @@
  */
 
 
-if (isset($_POST['submit'])) {
-    require "../config.php";
+if (isset($_POST['submit']))
+{
+	require "../config.php";
     require "../common.php";
-
-    try  {
+		$uname = $_POST['firstname'];
+	if(empty($uname))
+	{
+		$error = "enter your first name ";
+		
+	}
+	$lname = $_POST['lastname'];
+	if(empty($lname))
+	{
+		$error = "enter your last name ";
+		
+	}
+	$email = $_POST['email'];
+	if(empty($email))
+	{
+		$error = "enter your email ";
+		
+	}
+	$age = $_POST['age'];
+	if(empty($age))
+	{
+		$error = "enter your age ";
+		
+	}
+	$location = $_POST['location'];
+	if(empty($age))
+	{
+		$error = "enter your location ";
+		
+	}
+	
+	
+	if(($uname!="") and ($lname!="")and ($email!="") and ($age!="")and ($location!=""))
+	{
+			try  {
         $connection = new PDO($dsn, $username, $password, $options);
         
         $new_user = array(
@@ -31,17 +65,27 @@ if (isset($_POST['submit'])) {
         
         $statement = $connection->prepare($sql);
         $statement->execute($new_user);
-    } catch(PDOException $error) {
+    } catch(PDOException $error) 
+	{
         echo $sql . "<br>" . $error->getMessage();
     }
+	}
+	else
+	{ $error1=" error";
+	}
 }
 ?>
+
+
+
 
 <?php require "templates/header.php"; ?>
 
 <?php if (isset($_POST['submit']) && $statement) { ?>
     <blockquote><?php echo $_POST['firstname']; ?> successfully added.</blockquote>
 <?php } ?>
+
+
 
 <h2>Add a user</h2>
 
@@ -107,17 +151,31 @@ function validate()
 
 
 </script>
-<form method="post" name="create" onsubmit="return validate()">
+
+
+
+
+<form method="post" name="create" >
+<?php
+if(isset($error))
+{
+ ?>
+ 
+    <id="error" style="color:black; "><?php echo $error.$error1; 
+    
+}
+?>
+
     <label for="firstname">First Name</label>
-    <input type="text" name="firstname" id="firstname">
+    <input type="text" name="firstname" id="firstname" value="<?php if(isset($uname)){echo $uname;}?>">
     <label for="lastname">Last Name</label>
-    <input type="text" name="lastname" id="lastname">
+    <input type="text" name="lastname" id="lastname" value="<?php if(isset($lname)){echo $lname;}?>">
     <label for="email">Email Address</label>
-    <input type="text" name="email" id="email">
+    <input type="text" name="email" id="email" value="<?php if(isset($email)){echo $email;}?>">
     <label for="age">Age</label>
-    <input type="text" name="age" id="age">
+    <input type="text" name="age" id="age" value="<?php if(isset($age)){echo $age;}?>">
     <label for="location">Location</label>
-    <input type="text" name="location" id="location">
+    <input type="text" name="location" id="location" value="<?php if(isset($location)){echo $location;}?>">
     <input type="submit" name="submit" value="Submit">
 </form>
 
